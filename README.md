@@ -1,6 +1,6 @@
 # Бэкенд для сервиса Movies Explorer - дипломный проект Яндекс Практикум.
 
-## [Домен сервера](https://api.mishenkadiplom.nomoredomains.xyz/api) 
+## [Домен сервера](https://api.mishenkadiplom.nomoredomains.xyz/) 
 
 ## 
 - Javascript
