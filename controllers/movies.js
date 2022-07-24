@@ -3,12 +3,6 @@ const NotFoundError = require('../errors/NotFoundError');
 const BadRequest = require('../errors/BadRequest');
 const FobiddenError = require('../errors/FobiddenError');
 
-module.exports.getMovies = (req, res, next) => {
-  Movie.find({})
-    .then((movie) => res.send(movie))
-    .catch(next);
-};
-
 module.exports.postMovies = (req, res, next) => {
   const {
     country,
@@ -17,7 +11,7 @@ module.exports.postMovies = (req, res, next) => {
     year,
     description,
     image,
-    trailer,
+    trailerLink,
     nameRU,
     nameEN,
     thumbnail,
@@ -31,7 +25,7 @@ module.exports.postMovies = (req, res, next) => {
     year,
     description,
     image,
-    trailer,
+    trailerLink,
     nameRU,
     nameEN,
     thumbnail,
@@ -48,6 +42,13 @@ module.exports.postMovies = (req, res, next) => {
     });
 };
 
+module.exports.getMovies = (req, res, next) => {
+  const owner = req.user._id;
+  Movie.find({ owner })
+    .then((movie) => res.status(200).send(movie))
+    .catch(next);
+};
+
 module.exports.deleteMovies = (req, res, next) => {
   const { movieId } = req.params;
   Movie.findById(movieId)
@@ -58,7 +59,7 @@ module.exports.deleteMovies = (req, res, next) => {
       }
       return Movie.findByIdAndRemove(movieId)
         .then(() => {
-          res.send({ messege: 'Фильм удален' });
+          res.send({ message: 'Фильм удален' });
         });
     })
     .catch((err) => {

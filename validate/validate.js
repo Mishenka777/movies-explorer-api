@@ -1,4 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
+const { reg } = require('../utils/constants');
 
 module.exports.validatorLogin = celebrate({
   body: Joi.object().keys({
@@ -9,7 +10,7 @@ module.exports.validatorLogin = celebrate({
 
 module.exports.validatorСreateUser = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
@@ -24,19 +25,17 @@ module.exports.validatorUpdateUser = celebrate({
 
 module.exports.validatorPostMovies = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    email: Joi.string().required().email(),
-    country: Joi.string().min(2).max(30),
-    director: Joi.string().min(2).max(30),
+    country: Joi.string().required(),
+    director: Joi.string().required(),
     duration: Joi.number().required(),
-    year: Joi.number().required(),
-    description: Joi.string().min(2).max(30),
-    image: Joi.string().min(2).max(30),
-    trailer: Joi.string().min(2).max(30),
-    nameRU: Joi.string().min(2).max(30),
-    nameEN: Joi.string().min(2).max(30),
-    thumbnail: Joi.string().min(2).max(30),
+    year: Joi.string().required(),
+    description: Joi.string().required(),
+    image: Joi.string().required().pattern(reg),
+    trailerLink: Joi.string().required().pattern(reg),
+    thumbnail: Joi.string().required().pattern(reg),
     movieId: Joi.number().required(),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
   }),
 });
 

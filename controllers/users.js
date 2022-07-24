@@ -5,8 +5,7 @@ const NotFoundError = require('../errors/NotFoundError');
 const BadRequest = require('../errors/BadRequest');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 const ConflictError = require('../errors/ConflictError');
-
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = require('../utils/config');
 
 module.exports.getUserInfo = (req, res, next) => {
   User.findById(req.user._id)
@@ -17,11 +16,7 @@ module.exports.getUserInfo = (req, res, next) => {
       return res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequest('Введены некорректные данные'));
-      } else {
-        next(err);
-      }
+      next(err);
     });
 };
 
@@ -39,6 +34,8 @@ module.exports.updateUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
         next(new BadRequest('Введены некорректные данные'));
+      } else if (err.code === 11000) {
+        next(new ConflictError('Данный E-mail занят другим пользователем!'));
       } else {
         next(err);
       }
